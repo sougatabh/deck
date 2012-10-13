@@ -1,0 +1,54 @@
+<html>
+<head>
+  <title>
+   Deck a Cassandra admin tool
+</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css" />
+</head>
+<body id="" class=" ">
+
+  <div id="wrapper">
+  <div id="header-wrap">
+    <div id="header">
+    <ul id="global-nav">
+      <li><a class="home" href="">Home</a></li>
+      <li><a class="docs" href="">How it Works</a></li>
+    </ul>
+    <a href="/" id="logo"> </a>
+    <div id="main-nav">
+    </div>
+    </div>
+  </div>
+    <div id="header-messages">
+   </div>
+    <div id="content">
+      <div id="sign-in">
+      <%error%>
+	  <h1>Create new Column Space </h1>
+  		<div class="standard newform">
+	    	<form action="/save-keyspace" method="post">
+	        <div>
+	          <label for="id_new_keyspace">Keyspace</label>
+	          <input type='text' name='keyspace' value=''>
+	        </div>
+	        
+	        <div class="submit">
+        		<input type="submit" value="create" name="submit" />
+      		</div>
+	        
+	
+	    </form>
+	  </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="footer">
+  	Copyright to Deck
+  </div>
+
+
+
+</body>
+</html>
