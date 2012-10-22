@@ -14,10 +14,12 @@
 
 (defroutes deck-routes
    (route/files "/" {:root "public"})
-   (GET "/" [] (create-column-space))
-   (GET "/show-keyspaces" [] (show-keyspaces))
-   (GET "/create-keyspace" [] (create-keyspace))
-   (POST "/save-keyspace" {:as request}   (save-keyspace request)))
+   (GET "/" [] (create-keyspace))
+   (POST "/save-keyspace" {:as request}   (save-keyspace request))
+   (GET "/show-columnfamilies" {:as request} (show-columnfamilies request))
+   (GET "/create-columnfamily" {:as request} (create-columnfamily request))
+   (POST "/save-columnfamily" {:as request}  (save-columnfamily request))
+   (GET "/show-columns" {:as request}  (show-columns request)))
 
 
 ;;(def app (wrap-params mtask-routes:session))
