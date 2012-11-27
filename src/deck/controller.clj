@@ -17,6 +17,8 @@
 (def ^:dynamic *selectedkeyspace* "")
   
 
+
+
 (defn render-columnfamily-leftnav
   [columnfamily]
   (str "<li><a href='/search-column-family?columnfamily="(:name columnfamily)"&keyspace=" *selectedkeyspace* "'>"(:name columnfamily)"</a></li>"))
@@ -40,11 +42,21 @@
   [keyspaces]
   (map show-keyspaces-list keyspaces))        
 
+(defn generate-leftnav-items
+  "This is to generate left nav items"
+  [connection-name host-name cluster-name]
+    (str "<li>" connection-name "<ul><li>" cluster-name "<ul>" (apply str (generate-keyspace-list (get-keyspaces host-name  cluster-name))) "</ul></li></ul></li>"))
+
+
+(defn generate-each-connection
+  [each-connection-detail]
+  (let [[connection-name host cluster] (.split each-connection-detail ",")]
+  (generate-leftnav-items connection-name host cluster)))
 
 (defn generate-main-left-nav
   "This generates the main left nav"
   []
-  (str "<li>default<ul><li>Test Cluster<ul>" (apply str (generate-keyspace-list (get-keyspaces "localhost"  "Test Cluster"))) "</ul></li></ul></li>"))
+  (map generate-each-connection (.split (read-all-settings) "\n")))
 
         
 (defn create-keyspace

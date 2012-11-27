@@ -40,3 +40,8 @@
   (let [selected-ks (keyspace c keyspace-name)]
      (get-rows selected-ks columnfamily [key] :n-serializer serialization-type :v-serializer :string)))
 
+(defn cassandra-delete-column-families
+  "This function is to delete the column family of a keyspace"
+  []
+  )
+

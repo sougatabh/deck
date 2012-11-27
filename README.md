@@ -1,13 +1,26 @@
-# deck
+# About
 
-A Clojure library designed to ... well, that part is up to you.
+Deck is a web based GUI Cassandra client that helps you to explore data and manage your schema.
 
-## Usage
+## Current Version
+0.1
 
-FIXME
+## Download
+
+
+## Change Log
+
+## Screen Shots
+
+## Follow Deck
+
+## Features
+
+## Installation
+
 
 ## License
 
-Copyright © 2012 FIXME
+Copyright © 2012 
 
 Distributed under the Eclipse Public License, the same as Clojure.
