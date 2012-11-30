@@ -112,12 +112,7 @@
   (let [params (:params request)]
     ( cassandra-save-columnfamily (:keyspace params)  (:columnfamilyname params) (:comparator params) (:columnfamilytype params)
                                   (:defaultvalidator params) (:keyvalidator params))
-    (basil-core/render-by-name mtask-tpl "show-columnfamilies.html" 
-                               [{:error "" :keyspaces (generate-keyspace-list (generate-main-left-nav))
-                                 :selectedKeySpace (:keyspace params)
-                                 :message "Column Family Created Successfully!"
-                                 :columnfamilies (generate-columnfamily-list (cassandra-get-columnspaces (:keyspace params)))}]
-                               )))
+    (redirect (str "/show-columnfamilies?keyspace=" (:keyspace params)))))
 
 
 
@@ -136,6 +131,8 @@
          "<option value=':integer'>Integer</option>"
          "<option value=':bytes'>Bytes</option>"
         "</select>"))
+
+
 (defn printer[ks column-name-value]
   (if-not(= ":rowkey" (str ks))
   (str "<tr  class='warning'><td>" ks "</td>" "<td>" (second column-name-value)"</td><td>" data-type-drop-down "</td></tr>")))
