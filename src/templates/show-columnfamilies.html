@@ -46,23 +46,33 @@
     }
     
     function gotoAddColumnfamilyPage(keyspace){
-    	url = '/create-columnfamily?keyspace='+keyspace;
+    	hostname = document.forms[0].hostname.value;
+    	clustername = document.forms[0].clustername.value;
+    	url = '/create-columnfamily?keyspace='+keyspace+"&hostname="+hostname+"&clustername="+clustername;
 		gotoPage(url);
     }
     
-    function deleteColumnfamilies(){
+    function deleteColumnfamily(){
         var e= document.forms[0].elements.length;
-        alert(e)
-        var deleteIds = [];
-    	for(i=0;i<e;i++){
-    		if(document.forms[0].elements[i].name=="deleteId" && document.forms[0].elements[i].checked == true){
-    			deleteIds.push(document.forms[0].elements[i].value)
+
+        for(i=0;i<e;i++){
+    		if(document.forms[0].elements[i].name=="deleteColumnFamily" && document.forms[0].elements[i].checked == true){
+    			deleteId = document.forms[0].elements[i].value
     			
     		}
     		
     			
     	}
-    	url = '/delete-columnfamily?deleteIds='+deleteIds
+        
+    	hostname = document.forms[0].elements['hostname'].value;
+    	
+    	clustername = document.forms[0].elements['clustername'].value;
+    	
+    	selectedkeyspace = document.forms[0].elements['selectedkeyspace'].value;
+    	
+    	url = '/delete-columnfamily?deleteColumnFamily='+deleteId+"&keyspace="+selectedkeyspace+"&hostname="+hostname+"&clustername="+clustername
+            			
+    	
     	gotoPage(url);		
     }
     
@@ -123,15 +133,18 @@
         <!--Start of the Form Panel-->
         <div class="span9">
            
-           <button type="button" onclick="gotoAddColumnfamilyPage('<%selectedKeySpace%>')" class="btn btn-warning">Add Column Family</button>
+           <button type="button" onclick="gotoAddColumnfamilyPage('<%keyspace%>')" class="btn btn-warning">Add Column Family</button>
            
-           <form action="GET" > 
+           <form action="GET" >
+           <input type="hidden" id="idkeyspace" name="selectedkeyspace" value="<%keyspace%>">
+           <input type="hidden" id="idhostname" name="hostname" value="<%hostname%>">
+           <input type="hidden" id="idclustername" name="clustername" value="<%clustername%>"> 
           <div class="row-fluid">
           	<%message%>
             <legend>Column Families</legend>
-            <button type="button" onClick="deleteColumnfamilies()" class="btn btn-danger">Delete</button>
+            <button type="button" onClick="deleteColumnfamily()" class="btn btn-danger">Delete</button>
            	<table class="table table-bordered">
-	  			<thead><tr class='table-header'><td><b>Id</td><td>Name</td><td>Comparator</td><td>Type</td><td>Sub Comparator</td><td>Default Validator</td><td>Key Validator</td><td>Row Cache</td><td>Key Cache</td><td>Gc grace sec</b></td></tr></thead>
+	  			<thead><tr class='table-header'><td>Select</td><td>Id</td><td>Name</td><td>Comparator</td><td>Type</td><td>Sub Comparator</td><td>Default Validator</td><td>Key Validator</td><td>Row Cache</td><td>Key Cache</td><td>Gc grace sec</b></td></tr></thead>
 				<tbody>
 				<%columnfamilies%>
 				</tbody>

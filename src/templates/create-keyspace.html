@@ -109,6 +109,8 @@
         <div class="span9">
           <div class="row-fluid">
            <form action="/save-keyspace" method="post" class="form-horizontal" id="createkeyspacefrm">
+              <input type="hidden" name="hostname" value="<%hostname%>">
+              <input type="hidden" name="clustername" value="<%clustername%>">
               <legend>Create New Key Space</legend>
               <%message%>
               <div class="control-group">
