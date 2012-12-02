@@ -15,8 +15,8 @@
 (def mtask-tpl (basil-public/make-group-from-classpath :prefix "templates/"))
 
 (def ^:dynamic *selectedkeyspace* "")
-  
-
+(def ^:dynamic *selectedhostname* "")
+(def ^:dynamic *selectedcluster* "")
 
 
 (defn render-columnfamily-leftnav
@@ -30,7 +30,7 @@
 
 (defn show-keyspaces-list[keyspace]
   (binding [*selectedkeyspace* (:name keyspace)]
-  (str "<li> <a href='/show-columnfamilies?keyspace="(:name keyspace)"'>"(:name keyspace)"</a>"
+  (str "<li> <a href='/show-columnfamilies?keyspace="(:name keyspace)"&hostname="*selectedhostname* "&clustername="*selectedcluster* "'>"(:name keyspace)"</a>"
        "<ul>"
        (if (cassandra-get-columnspaces (:name keyspace))
        (apply str(generate-columnfamilies-leftnav (cassandra-get-columnspaces (:name keyspace)))))
@@ -45,7 +45,10 @@
 (defn generate-leftnav-items
   "This is to generate left nav items"
   [connection-name host-name cluster-name]
-    (str "<li>" connection-name "<ul><li>" cluster-name "<ul>" (apply str (generate-keyspace-list (get-keyspaces host-name  cluster-name))) "</ul></li></ul></li>"))
+    (binding [*selectedhostname* host-name
+              *selectedcluster* cluster-name]
+    (str "<li>" connection-name "<ul><li><a href='/show-keyspaces?hostname=" host-name "&clustername="cluster-name "'>" cluster-name "</a><ul>"
+         (apply str (generate-keyspace-list (get-keyspaces host-name  cluster-name))) "</ul></li></ul></li>")))
 
 
 (defn generate-each-connection
@@ -58,25 +61,54 @@
   []
   (map generate-each-connection (.split (read-all-settings) "\n")))
 
-        
+(defn render-each-keyspace
+  [each-keyspace]
+  (str "<tr class='table-row'>"
+       "<td><input type='radio' name='deleteKeyspace' value='"(:name each-keyspace)"'></td>"
+       "<td>" (:name each-keyspace) "</td>"
+       "<td>" (:replication-factor each-keyspace) "</td>"
+       "</tr>"))
+(defn render-keyspaces-table[host-name cluster-name]
+  (map render-each-keyspace (get-keyspaces host-name  cluster-name)))
+  
+(defn show-keyspaces-page
+  [request]
+  (let [params (:params request)]
+  (basil-core/render-by-name mtask-tpl "show-keyspaces.html" [{:message "" :error "" 
+                                                               :keyspaces (generate-main-left-nav)
+                                                               :all-keyspaces (render-keyspaces-table (:hostname params) (:clustername params))
+                                                               :hostname (:hostname params)
+                                                               :clustername (:clustername params)}])))
+
+
 (defn create-keyspace
   "This is to create New Key space"
-  []
-  (basil-core/render-by-name mtask-tpl "create-keyspace.html" [{:message "" :error "" :keyspaces (generate-main-left-nav)}]))
+  [request]
+  (let [params (:params request)]
+  (basil-core/render-by-name mtask-tpl "create-keyspace.html" [{:message "" :error "" :keyspaces (generate-main-left-nav)
+                                                                :hostname (:hostname params)
+                                                                :clustername (:clustername params)}])))
 
 (defn save-keyspace[request]
   (let [params (:params request)]
-  (println "Creating Keyspace" (:keyspace params))
-  (cassandra-save-keyspace (:keyspace params) (:strategyclass params) (:replicationfactor params))
-  (basil-core/render-by-name mtask-tpl "create-keyspace.html" [{:message "Keyspace created Successfully!" :keyspaces (generate-main-left-nav)}])))
+  (cassandra-save-keyspace (:hostname params) (:clustername params)(:keyspace params) (:strategyclass params) (:replicationfactor params))
+  (redirect (str "/show-keyspaces?hostname=" (:hostname params) "&clustername=" (:clustername params)))))
 
 (defn render-column-family 
   [columnfamily]
   (str "<tr class='table-row'>"
-       "<td><input type='checkbox' name='deleteId' value='"(:id columnfamily)"'></td>"
-       "<td><a href='/search-column-family?columnfamily="(:name columnfamily)"&keyspace=" *selectedkeyspace* "''>" (:id columnfamily) "</a></td>" "<td>" (:name columnfamily) 
-       "</td>" "<td>" (validator-class-type (:comparator columnfamily)) "</td>" "<td>" (types (:type columnfamily)) "</td>" "<td>" (validator-class-type (:validator columnfamily)) "</td>"
-       "<td>" (validator-class-type (:k-validator columnfamily))"</td>" "<td>"  " 0 </td>" "<td>"  "0 </td>" "<td>"  "0 </td>" 
+       "<td><input type='radio' name='deleteColumnFamily' value='"(:name columnfamily)"'></td>"
+       "<td><a href='/search-column-family?columnfamily="(:name columnfamily)"&keyspace=" *selectedkeyspace* "''>" (:id columnfamily) "</a></td>" 
+       "<td>" (:name columnfamily) "</td>"
+       "<td>" (validator-class-type (:comparator columnfamily)) "</td>" 
+       "<td>" (types (:type columnfamily)) "</td>" 
+       "<td>" (validator-class-type (:validator columnfamily)) "</td>"
+       "<td>" (validator-class-type (:k-validator columnfamily))"</td>"
+       "<td>"  " 0 </td>" 
+       "<td>"  "0 </td>" 
+       "<td>"  "0 </td>"
+       "<td>"  "0 </td>" 
+       
        "</tr>"))
 
 (defn generate-columnfamily-list
@@ -89,9 +121,12 @@
   (let [params (:params request)]
     (binding [*selectedkeyspace* (:keyspace params)]
     (basil-core/render-by-name mtask-tpl "show-columnfamilies.html" 
-                               [{:error "" :keyspaces (generate-main-left-nav)
-                                 :selectedKeySpace (:keyspace params)
+                               [{:error "" 
+                                 :keyspaces (generate-main-left-nav)
                                  :message ""
+                                 :keyspace (:keyspace params) 
+                                 :hostname (:hostname params)
+                                 :clustername (:clustername params)
                                  :columnfamilies (generate-columnfamily-list (cassandra-get-columnspaces (:keyspace params)))}]
                                ))))
 
@@ -105,14 +140,17 @@
                                :subcomparators (get-subcomparator-dropdown)
                                :validator-class (get-validation-class-dropdown)
                                :columnfamilies (get-comlumnfamily-type-dropdown)
-                               :selectedKeySpace (:keyspace params)}])))
+                               :selectedKeySpace (:keyspace params)
+                               :hostname (:hostname params)
+                               :clustername (:clustername params)}])))
 
 
 (defn save-columnfamily[request]
   (let [params (:params request)]
-    ( cassandra-save-columnfamily (:keyspace params)  (:columnfamilyname params) (:comparator params) (:columnfamilytype params)
+    ( cassandra-save-columnfamily (:hostname params) (:clustername params) (:keyspace params)  
+                                  (:columnfamilyname params) (:comparator params) (:columnfamilytype params)
                                   (:defaultvalidator params) (:keyvalidator params))
-    (redirect (str "/show-columnfamilies?keyspace=" (:keyspace params)))))
+    (redirect (str "/show-columnfamilies?keyspace=" (:keyspace params) "&hostname="(:hostname params) "&clustername=" (:clustername params)))))
 
 
 
@@ -188,5 +226,14 @@
 (defn delete-columnfamily[request]
   (let [
        params (:params request)
-       deleteIds (:deleteIds params)]
-    (println "sougata" (split deleteIds #","))))
+       ]
+  (cassandra-drop-column-family (:hostname params) (:clustername params) (:keyspace params) (:deleteColumnFamily params))
+  (redirect (str "/show-columnfamilies?keyspace=" (:keyspace params) "&hostname="(:hostname params) "&clustername=" (:clustername params)))))
+
+
+(defn index
+  "This is the index page"
+  [request]
+  (let [params (:params request)]
+  (basil-core/render-by-name mtask-tpl "index.html" [{:message "" :error "" :keyspaces (generate-main-left-nav)
+                                                                }])))

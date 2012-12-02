@@ -21,17 +21,19 @@
 
 (defn cassandra-save-keyspace
   "This is create new key space in cassandra cluster"
-  [keyspace-name strategy replicationfactor]
-  (let [rf (if (empty replicationfactor) "1" replicationfactor)]
-  (add-keyspace c {:name keyspace-name
+  [hostname clustername keyspace-name strategy replicationfactor]
+  (let [rf (if (empty replicationfactor) "1" replicationfactor)
+        cluster (cluster clustername hostname)]
+  (add-keyspace cluster {:name keyspace-name
                      :strategy strategy
                      :replication (Integer/parseInt rf)})))
 
 (defn cassandra-save-columnfamily
   "This is to create a column family in the provided key space"
-  [keyspace-name column-familyname mcomparator mtype validator k-validator]
+  [ hostname clustername keyspace-name column-familyname mcomparator mtype validator k-validator]
   ;;Talk to shantanu and fix the comparator value, currently it is hard coded
-  (add-column-family c keyspace-name {:name column-familyname :comparator :long :type mtype :validator validator :k-validator k-validator}))
+  (let [cluster (cluster clustername hostname) ]
+  (add-column-family cluster keyspace-name {:name column-familyname :comparator :long :type mtype :validator validator :k-validator k-validator})))
 
 (defn cassandra-get-rows
   "Get the rows for the  given keyspace,column family key and serlization type"
@@ -40,8 +42,10 @@
   (let [selected-ks (keyspace c keyspace-name)]
      (get-rows selected-ks columnfamily [key] :n-serializer serialization-type :v-serializer :string)))
 
-(defn cassandra-delete-column-families
+(defn cassandra-drop-column-family
   "This function is to delete the column family of a keyspace"
-  []
+  [host-name cluster-name keyspace-name column-family-name]
+  (let [selected-cluster (cluster cluster-name host-name)]
+    (drop-column-family selected-cluster keyspace-name column-family-name))
   )
 

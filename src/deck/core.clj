@@ -9,19 +9,19 @@
             [basil.group :as basil-group]
             [ring.util.response :as resp]))
 
-(defn display[]
-  
+(defn display
+  "This is a test function to test compojure"
+  []
   (html [:h1 "Hello Welcome to the Deck"]))
 
-(defn index
-  "This is to create New Key space"
-  []
-  (basil-public/render-by-name mtask-tpl "index.basil" [{:error ""}]))
+
 
 (defroutes deck-routes
    (route/files "/" {:root "public"})
    (GET "/index" [] (index))
-   (GET "/" [] (create-keyspace))
+   (GET "/" {:as request} (index request))
+   (GET "/create-keyspace" {:as request} (create-keyspace request))
+   (GET "/show-keyspaces" {:as request} (show-keyspaces-page request))
    (POST "/save-keyspace" {:as request}   (save-keyspace request))
    (GET "/show-columnfamilies" {:as request} (show-columnfamilies request))
    (GET "/create-columnfamily" {:as request} (create-columnfamily request))
