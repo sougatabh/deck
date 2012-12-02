@@ -231,6 +231,15 @@
   (redirect (str "/show-columnfamilies?keyspace=" (:keyspace params) "&hostname="(:hostname params) "&clustername=" (:clustername params)))))
 
 
+
+(defn delete-keyspace[request]
+  (let [
+       params (:params request)
+       ]
+  (cassandra-drop-keyspace (:hostname params) (:clustername params) (:deleteKeyspace params))
+  (redirect (str "/show-keyspaces?hostname="(:hostname params) "&clustername=" (:clustername params)))))
+
+
 (defn index
   "This is the index page"
   [request]

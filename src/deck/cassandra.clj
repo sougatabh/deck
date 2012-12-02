@@ -46,6 +46,11 @@
   "This function is to delete the column family of a keyspace"
   [host-name cluster-name keyspace-name column-family-name]
   (let [selected-cluster (cluster cluster-name host-name)]
-    (drop-column-family selected-cluster keyspace-name column-family-name))
-  )
+    (drop-column-family selected-cluster keyspace-name column-family-name)))
+
+(defn cassandra-drop-keyspace
+  [hostname clustername keyspace]
+  
+  (let [selected-cluster (cluster clustername hostname)]
+    (drop-keyspace selected-cluster keyspace)))
 
