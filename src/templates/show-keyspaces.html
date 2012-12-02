@@ -50,19 +50,17 @@
 		gotoPage(url);
     }
     
-    function deleteColumnfamilies(){
+    function deleteKeySpace(hostname,clustername){
         var e= document.forms[0].elements.length;
 
         for(i=0;i<e;i++){
-    		if(document.forms[0].elements[i].name=="deleteColumnFamily" && document.forms[0].elements[i].checked == true){
-    			deleteIds = document.forms[0].elements[i].value
+    		if(document.forms[0].elements[i].name=="deleteKeyspace" && document.forms[0].elements[i].checked == true){
+    			deleteId = document.forms[0].elements[i].value
     			
     		}
-    		
-    			
     	}
-    	keyspace = document.forms[0].idKeyspace.value;
-    	url = '/delete-columnfamily?deleteColumnFamily='+deleteIds+"&keyspace="+keyspace
+    	
+    	url = '/delete-keyspace?deleteKeyspace='+deleteId+"&hostname="+hostname+"&clustername="+clustername
     	gotoPage(url);		
     }
     
@@ -130,7 +128,7 @@
           <div class="row-fluid">
           
             <legend>Column Families</legend>
-            <button type="button" onClick="deleteColumnfamilies()" class="btn btn-danger">Delete</button>
+            <button type="button" onClick="deleteKeySpace('<%hostname%>','<%clustername%>')" class="btn btn-danger">Delete</button>
             <br/><br/>
            	<table class="table table-bordered">
 	  			<thead><tr class='table-header'><td>Select</td><td>Name</td><td>Replication Factor</td></tr></thead>
