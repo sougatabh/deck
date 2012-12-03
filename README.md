@@ -6,7 +6,7 @@ Deck is a web based GUI Cassandra client that helps you to explore data and mana
 0.1
 
 ## Download
-
+[here](https://github.com/sougatabh/deck/downloads)
 
 ## Change Log
 
