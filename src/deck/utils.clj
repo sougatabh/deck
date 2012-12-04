@@ -90,7 +90,7 @@
   "Read the settings file"
   (str(slurp "settings")))
 
-;;(doall(map make-connections-list (split line #",")))
+
 
 (defn write-settings [line]
   (let [wrtr (io/writer "settings" :append true)]

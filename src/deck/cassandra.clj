@@ -8,8 +8,6 @@
 (def c (cluster "Test Cluster" "localhost"))
 (def ks (keyspace c "DEMO"))
 
-(defn get-record[]
-(println (get-rows ks "Users" ["1234"] :n-serializer :string)))
 
 (defn get-keyspaces[host mycluster]
   (keyspaces (cluster mycluster host)))
@@ -38,7 +36,6 @@
 (defn cassandra-get-rows
   "Get the rows for the  given keyspace,column family key and serlization type"
   [keyspace-name columnfamily key serialization-type]
-  
   (let [selected-ks (keyspace c keyspace-name)]
      (get-rows selected-ks columnfamily [key] :n-serializer serialization-type :v-serializer :string)))
 

@@ -244,5 +244,4 @@
   "This is the index page"
   [request]
   (let [params (:params request)]
-  (basil-core/render-by-name mtask-tpl "index.html" [{:message "" :error "" :keyspaces (generate-main-left-nav)
-                                                                }])))
+  (basil-core/render-by-name mtask-tpl "index.html" [{:message "" :error "" :keyspaces (generate-main-left-nav)}])))

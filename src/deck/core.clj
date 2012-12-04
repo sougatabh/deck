@@ -1,7 +1,7 @@
 (ns ^{:author "Sougata Bhattacharya"
       :doc "A Cassandra Admin Tool"} 
   deck.core
-  (:use compojure.core,ring.middleware.params,ring.middleware.session,hiccup.core,deck.controller)
+  (:use compojure.core,ring.middleware.params,ring.middleware.session,deck.controller)
 	(:require [compojure.route :as route] 
             [compojure.handler :as handler]
 	          [basil.core :as basil-core]
@@ -9,10 +9,6 @@
             [basil.group :as basil-group]
             [ring.util.response :as resp]))
 
-(defn display
-  "This is a test function to test compojure"
-  []
-  (html [:h1 "Hello Welcome to the Deck"]))
 
 
 
@@ -23,6 +19,7 @@
    (GET "/create-keyspace" {:as request} (create-keyspace request))
    (GET "/show-keyspaces" {:as request} (show-keyspaces-page request))
    (POST "/save-keyspace" {:as request}   (save-keyspace request))
+   (GET "/delete-keyspace" {:as request}   (delete-keyspace request))
    (GET "/show-columnfamilies" {:as request} (show-columnfamilies request))
    (GET "/create-columnfamily" {:as request} (create-columnfamily request))
    (POST "/save-columnfamily" {:as request}  (save-columnfamily request))
