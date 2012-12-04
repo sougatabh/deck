@@ -1,4 +1,4 @@
-(defproject deck "0.1"
+(defproject deck "0.1.0"
   :description "This is a cassandra admin web tool"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
