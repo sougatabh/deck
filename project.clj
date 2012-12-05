@@ -7,6 +7,6 @@
   :dependencies [
                 [org.clojure/clojure "1.4.0"]
                 [compojure "1.1.1"]
-		            [basil "0.4.0"]
+                [basil "0.4.0"]
                 [org.clojars.paul/clj-hector "0.2.5"]]
   :ring {:handler deck.core/app})
