@@ -32,6 +32,4 @@
    (GET "/delete-columnfamily" {:as request} (delete-columnfamily request)))
 
 
-
-;;(def app (wrap-params mtask-routes:session))
 (def app (compojure.handler/site deck-routes))

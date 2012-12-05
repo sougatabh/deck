@@ -1,9 +1,7 @@
 (ns ^{:author "Sougata Bhattacharya"
       :doc "A Cassandra Admin Tool"}
    deck.cassandra
-  (:use [clj-hector.core])
-  (:use [clj-hector.ddl] )
-  (:use [clj-hector.serialize]))
+  (:use clj-hector.core,clj-hector.ddl,clj-hector.serialize))
 
 (def c (cluster "Test Cluster" "localhost"))
 (def ks (keyspace c "DEMO"))

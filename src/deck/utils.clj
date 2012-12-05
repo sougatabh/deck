@@ -1,6 +1,7 @@
-(ns deck.utils
-  (:use [
-         clojure.string :only (join split)])
+(ns ^{:author "Sougata Bhattacharya"
+      :doc "A Cassandra Admin Tool"}  
+  deck.utils
+  (:use [clojure.string :only (join split)])
   (:require [clojure.java.io :as io]))
 
 
@@ -17,9 +18,8 @@
                       :uuid              "UUIDType"
                       :counter           "CounterColumnType"})
 
-(def types           {:simple             "Simple"
-                      :standard             "Standard"
-                      })
+(def types {:simple "Simple"
+             :standard "Standard"})
 
 
 (defn get-comparator-dropdown
