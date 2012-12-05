@@ -1,15 +1,13 @@
 (ns ^{:author "Sougata Bhattacharya"
       :doc "A Cassandra Admin Tool"} 
   deck.controller
-  (:use compojure.core,ring.middleware.params,ring.middleware.session,ring.util.response,hiccup.core,hiccup.form,deck.cassandra,deck.utils)
+  (:use compojure.core,ring.middleware.params,ring.middleware.session,ring.util.response,clojure.string,deck.cassandra,deck.utils)
   (:require [compojure.route :as route] 
             [compojure.handler :as handler]
             [ring.util.response :as resp]
             [basil.core :as basil-core]
 	          [basil.public  :as basil-public]
-            [basil.group :as basil-group])
-   (:use [
-         clojure.string :only (join split)]))
+            [basil.group :as basil-group]))
 
 
 (def mtask-tpl (basil-public/make-group-from-classpath :prefix "templates/"))
@@ -25,10 +23,12 @@
 
 
 
-(defn generate-columnfamilies-leftnav[columnfamiles]  
+(defn generate-columnfamilies-leftnav
+  [columnfamiles]  
    (map render-columnfamily-leftnav columnfamiles))
 
-(defn show-keyspaces-list[keyspace]
+(defn show-keyspaces-list
+  [keyspace]
   (binding [*selectedkeyspace* (:name keyspace)]
   (str "<li> <a href='/show-columnfamilies?keyspace="(:name keyspace)"&hostname="*selectedhostname* "&clustername="*selectedcluster* "'>"(:name keyspace)"</a>"
        "<ul>"
@@ -89,7 +89,8 @@
                                                                 :hostname (:hostname params)
                                                                 :clustername (:clustername params)}])))
 
-(defn save-keyspace[request]
+(defn save-keyspace
+  [request]
   (let [params (:params request)]
   (cassandra-save-keyspace (:hostname params) (:clustername params)(:keyspace params) (:strategyclass params) (:replicationfactor params))
   (redirect (str "/show-keyspaces?hostname=" (:hostname params) "&clustername=" (:clustername params)))))
@@ -131,7 +132,8 @@
                                ))))
 
 
-(defn create-columnfamily[request]
+(defn create-columnfamily
+  [request]
   (generate-main-left-nav)
   (let [params (:params request)]
   (basil-core/render-by-name mtask-tpl "create-columnfamily.html" 
@@ -145,7 +147,8 @@
                                :clustername (:clustername params)}])))
 
 
-(defn save-columnfamily[request]
+(defn save-columnfamily
+  [request]
   (let [params (:params request)]
     ( cassandra-save-columnfamily (:hostname params) (:clustername params) (:keyspace params)  
                                   (:columnfamilyname params) (:comparator params) (:columnfamilytype params)
@@ -154,10 +157,12 @@
 
 
 
-(defn show-keyspaces[]
+(defn show-keyspaces
+  []
   (basil-core/render-by-name mtask-tpl "show-keyspaces.basil" [{:keyspaces-dropdown ""}])) 
 
-(defn search-column-family[request]
+(defn search-column-family
+  [request]
   (let [params (:params request)]
   (basil-core/render-by-name mtask-tpl "search-columnfamily.html" [{:keyspaces (generate-main-left-nav)
                                                                     :keyspace (:keyspace params) :columnfamily (:columnfamily params) 
@@ -171,19 +176,23 @@
         "</select>"))
 
 
-(defn printer[ks column-name-value]
+(defn printer
+  [ks column-name-value]
   (if-not(= ":rowkey" (str ks))
   (str "<tr  class='warning'><td>" ks "</td>" "<td>" (second column-name-value)"</td><td>" data-type-drop-down "</td></tr>")))
 
-(defn populate-data[column-name-value]
+(defn populate-data
+  [column-name-value]
   (let [ks (keys column-name-value)
         body (map printer ks column-name-value)]
         (apply str  body)))
        
-(defn pupulate-search-result[all-values]
+(defn pupulate-search-result
+  [all-values]
   (map populate-data all-values))
 
-(defn search [request]
+(defn search 
+  [request]
   (let [params (:params request)
         search-result (cassandra-get-rows (:keyspace params) (:columnfamily params)(:key params) (:serializationtype params))
         re  (map (fn [m] (let [k (first (keys m)) v (get m k)] (merge v {:rowkey k}))) search-result)
@@ -203,7 +212,8 @@
    (basil-core/render-by-name mtask-tpl "add-column.html" [{:keyspaces (generate-main-left-nav):keyspace (:keyspace params) :columnfamily (:columnfamily params)}]) ))
 
 
-(defn populate-all-connections-table[all-connections]
+(defn populate-all-connections-table
+  [all-connections]
   (map  (fn [x]  (str "<tr class='table-row'><td>" (clojure.string/replace (str x)  #","  "</td><td>")  "</td></tr>")) (.split all-connections "\n")))
 
 (defn show-all-settings
@@ -223,19 +233,17 @@
   (redirect "/show-all-settings")))
 
 
-(defn delete-columnfamily[request]
-  (let [
-       params (:params request)
-       ]
+(defn delete-columnfamily
+  [request]
+  (let [params (:params request)]
   (cassandra-drop-column-family (:hostname params) (:clustername params) (:keyspace params) (:deleteColumnFamily params))
   (redirect (str "/show-columnfamilies?keyspace=" (:keyspace params) "&hostname="(:hostname params) "&clustername=" (:clustername params)))))
 
 
 
-(defn delete-keyspace[request]
-  (let [
-       params (:params request)
-       ]
+(defn delete-keyspace
+  [request]
+  (let [params (:params request)]
   (cassandra-drop-keyspace (:hostname params) (:clustername params) (:deleteKeyspace params))
   (redirect (str "/show-keyspaces?hostname="(:hostname params) "&clustername=" (:clustername params)))))
 
