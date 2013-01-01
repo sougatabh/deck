@@ -14,8 +14,9 @@
 
 (defroutes deck-routes
    (route/files "/" {:root "public"})
-   (GET "/index" [] (index))
-   (GET "/" {:as request} (index request))
+   (GET "/" {:as request} (main-page request))
+
+   (GET "/index" {:as request} (index request))
    (GET "/create-keyspace" {:as request} (create-keyspace request))
    (GET "/show-keyspaces" {:as request} (show-keyspaces-page request))
    (POST "/save-keyspace" {:as request}   (save-keyspace request))
@@ -29,7 +30,12 @@
    (GET "/show-all-settings" {:as request} (show-all-settings request))
    (GET "/setup-new-host" {:as request} (setup-new-host request))
    (POST "/save-connection" {:as request} (save-connection request))
-   (GET "/delete-columnfamily" {:as request} (delete-columnfamily request)))
+   (GET "/delete-columnfamily" {:as request} (delete-columnfamily request))
+   (GET "/show-cql-editor" {:as request} (show-cql-editor request))
+   (GET "/action-cluster" {:as request} (action-cluster request))
+   (GET "/action-keyspace" {:as request} (action-keyspace request))
+   (GET "/action-columnfamily" {:as request} (action-columnfamily request))
+   (POST "/execute-cql" {:as request} (execute-cql request)))
 
 
 (def app (compojure.handler/site deck-routes))

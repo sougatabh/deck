@@ -2,7 +2,8 @@
       :doc "A Cassandra Admin Tool"}  
   deck.utils
   (:use [clojure.string :only (join split)])
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io])
+  )
 
 
 (def validator-class-type           {:ascii             "AsciiType"
@@ -88,12 +89,12 @@
 
 (defn read-all-settings []
   "Read the settings file"
-  (str(slurp "settings")))
+ (slurp (clojure.java.io/resource "settings")))
 
 
 
 (defn write-settings [line]
-  (let [wrtr (io/writer "settings" :append true)]
+  (let [wrtr (io/writer "resources/settings" :append true)]
   (.write wrtr line)
   (.write wrtr "\n")
   (.close wrtr)))

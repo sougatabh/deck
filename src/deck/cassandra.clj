@@ -12,8 +12,9 @@
 
 (defn cassandra-get-columnspaces
   "Get the keyspace for given keyspace"
-  [keyspace]
-  (column-families c keyspace))
+  [keyspace hostname clustername]
+  (let [cluster (cluster clustername hostname)]
+  (column-families cluster keyspace)))
 
 (defn cassandra-save-keyspace
   "This is create new key space in cassandra cluster"
@@ -27,14 +28,14 @@
 (defn cassandra-save-columnfamily
   "This is to create a column family in the provided key space"
   [ hostname clustername keyspace-name column-familyname mcomparator mtype validator k-validator]
-  ;;Talk to shantanu and fix the comparator value, currently it is hard coded
   (let [cluster (cluster clustername hostname) ]
   (add-column-family cluster keyspace-name {:name column-familyname :comparator :long :type mtype :validator validator :k-validator k-validator})))
 
 (defn cassandra-get-rows
   "Get the rows for the  given keyspace,column family key and serlization type"
-  [keyspace-name columnfamily key serialization-type]
-  (let [selected-ks (keyspace c keyspace-name)]
+  [keyspace-name columnfamily key serialization-type hostname clustername]
+  (let [cluster (cluster clustername hostname)
+        selected-ks (keyspace cluster keyspace-name)]
      (get-rows selected-ks columnfamily [key] :n-serializer serialization-type :v-serializer :string)))
 
 (defn cassandra-drop-column-family
@@ -48,4 +49,15 @@
   
   (let [selected-cluster (cluster clustername hostname)]
     (drop-keyspace selected-cluster keyspace)))
+
+(defn cassandra-get-rows-cql-query
+  [hostname clustername keyspacename query]
+  (let[cluster (cluster clustername hostname)
+       keyspace (keyspace cluster keyspacename)
+       opts [:v-serializer :string
+             :n-serializer :string
+             :k-serializer :string]
+      ]
+   (println keyspace)
+   (get-rows-cql-query keyspace "select * from person")))
 
