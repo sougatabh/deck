@@ -1,168 +1,35 @@
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Deck: A Cassandra Admin tool</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<head>
+    
 <link rel="icon" href="/img/logo.ico" />
-    <!-- Le styles -->
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/jquery.treeview.css" />
-    <link href="/css/deckmain.css" rel="stylesheet">
-    
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .sidebar-nav {
-        padding: 9px 0;
-      }
-    </style>
-    
-    
-    <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+<!-- Le styles -->
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/jquery.treeview.css" />
+<link rel="stylesheet" href="/css/deckmain.css" />
+<link href="/css/bootstrap-responsive.css" rel="stylesheet">
+<script src="/js/lib/jquery.js" type="text/javascript"></script>
+<script src="/js/lib/jquery.cookie.js" type="text/javascript"></script>
+<script src="/js/jquery.treeview.js" type="text/javascript"></script>
+<script src="/js/deck.js" type="text/javascript"></script>
+</head>  
 
-  <script src="/js/lib/jquery.js" type="text/javascript"></script>
-  <script src="/js/lib/jquery.cookie.js" type="text/javascript"></script>
-  <script src="/js/jquery.treeview.js" type="text/javascript"></script>
-  
-  <script type="text/javascript">
-    $(function() {
-      $("#tree").treeview({
-        collapsed: true,
-        animated: "medium",
-        
-        persist: "location"
-      });
-    })
-    
-    function loadSettingsPage(){
-    	url = '/show-all-settings';
-		gotoPage(url);
-    }
-    
-    function gotoAddColumnfamilyPage(keyspace){
-    	hostname = document.forms[0].hostname.value;
-    	clustername = document.forms[0].clustername.value;
-    	url = '/create-columnfamily?keyspace='+keyspace+"&hostname="+hostname+"&clustername="+clustername;
-		gotoPage(url);
-    }
-    
-    function deleteColumnfamily(){
-        var e= document.forms[0].elements.length;
 
-        for(i=0;i<e;i++){
-    		if(document.forms[0].elements[i].name=="deleteColumnFamily" && document.forms[0].elements[i].checked == true){
-    			deleteId = document.forms[0].elements[i].value
-    			
-    		}
-    		
-    			
-    	}
-        
-    	hostname = document.forms[0].elements['hostname'].value;
-    	
-    	clustername = document.forms[0].elements['clustername'].value;
-    	
-    	selectedkeyspace = document.forms[0].elements['selectedkeyspace'].value;
-    	
-    	url = '/delete-columnfamily?deleteColumnFamily='+deleteId+"&keyspace="+selectedkeyspace+"&hostname="+hostname+"&clustername="+clustername
-            			
-    	
-    	gotoPage(url);		
-    }
-    
-    function gotoPage(url){
-    	window.location = url;
-    }
-    
-
-        
-  </script>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le fav and touch icons -->
-    <head>
-
-  <body>
-
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Deck</a>
-          <div class="nav-collapse collapse">
-            <p class="navbar-text pull-right">
-               <label class="settings" onClick="loadSettingsPage()"></label>
-            </p>
-            <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-
-    <div class="container-fluid">
-    
-        <!--Start of the Left Panel-->
-       <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav">
-            <ul id="tree">
-            	<%keyspaces%>
-              
-          	</ul>
-          </div><!--/.well -->
-        </div><!--/span-->
-        <!--End of the Left Panel-->
-        <!--Start of the Form Panel-->
-        <div class="span9">
-           
-           <button type="button" onclick="gotoAddColumnfamilyPage('<%keyspace%>')" class="btn btn-warning">Add Column Family</button>
-           
-           <form action="GET" >
-           <input type="hidden" id="idkeyspace" name="selectedkeyspace" value="<%keyspace%>">
-           <input type="hidden" id="idhostname" name="hostname" value="<%hostname%>">
-           <input type="hidden" id="idclustername" name="clustername" value="<%clustername%>"> 
-          <div class="row-fluid">
-          	<%message%>
-            <legend>Column Families</legend>
-            <button type="button" onClick="deleteColumnfamily()" class="btn btn-danger">Delete</button>
-           	<table class="table table-bordered">
-	  			<thead><tr class='table-header'><td>Select</td><td>Id</td><td>Name</td><td>Comparator</td><td>Type</td><td>Sub Comparator</td><td>Default Validator</td><td>Key Validator</td><td>Row Cache</td><td>Key Cache</td><td>Gc grace sec</b></td></tr></thead>
-				<tbody>
-				<%columnfamilies%>
-				</tbody>
-				
-			</table>
-			</form>
+ <form action="GET" >
+ <input type="hidden" id="idkeyspace" name="selectedkeyspace" value="<%keyspace%>">
+ <input type="hidden" id="idhostname" name="hostname" value="<%hostname%>">
+ <input type="hidden" id="idclustername" name="clustername" value="<%clustername%>"> 
+<div class="row-fluid">
+	<%message%>
+  <legend>Column Families</legend>
+  <button type="button" onClick="deleteColumnfamily()" class="btn btn-danger">Delete</button><br/><br/>
+        	<table class="table table-hover">
+			<tr>
+			<th>Select</th><th>Id</th><th>Name</th><th>Comparator</th><th>Type</th><th>Sub Comparator</th><th>Default Validator</th><th>Key Validator</th><th>Row Cache</th><th>Key Cache</th><th>Gc grace sec</th>
+			</tr>
+	<tbody>
+	<%columnfamilies%>
+	</tbody>
+	
+</table>
+</form>
 			
-          </div><!--/row-->
-        </div>
-        <!--End of the Form Panel-->
-          <hr>
-
-          <footer>
-            <p>&copy; Sougata Bhattacharya 2012</p>
-          </footer>
-
-    </div><!--/.fluid-container-->
-
-
-  </body>
-</html>
