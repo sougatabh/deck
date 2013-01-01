@@ -2,23 +2,218 @@
  * This is applications custom css file
  */
 
+textarea#styled {
+	width: 600px;
+	height: 120px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+	background-image: url(bg.gif);
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}
 .settings
 {
 width:40px;
 height:40px;
 background:url(images/settings.png) 0 0;
 }
-.table-header{
-	
-	background-color: #FFFFB8;
-	font-family:Arial;
-	font-size:15px;
+.cql
+{
+width:40px;
+height:40px;
+background:url(images/execute.png) 0 0;
+}
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
 }
 
-.table-row{
-	
-	background-color: #DFF0D8;
-	font-family:Arial;
-	font-size:12px;
+/*Start of Tab specific UI Changes*/
+/* Original tabs */
+#original_tabs {
+	border-bottom: 1px solid #cccccc;
+}
+#original_tabs ul {
+	list-style: none;
+	padding: 5px 0 4px 0;
+	margin: 0 0 0 10px;
+	font-size: 0.75em;
+	font-family: Arial, Verdana, sans-serif;
+}
+#original_tabs ul li {
+	display: inline;
+}
+#original_tabs ul li a {
+	border: 1px solid #ccc;
+	padding: 4px 6px;
+	text-decoration: none;
+	background-color: #eeeeee;
+	border-bottom: none;
+	outline: none;
+	border-radius: 5px 5px 0 0;
+}
+#original_tabs ul li a:hover {
+	background-color: #dddddd;
+}
+#original_tabs ul li.active a {
+	border-bottom: 1px solid #fff;
+	background-color: #fff;
+	padding: 4px 6px 5px;
+	border-bottom: none;
+}
+#original_tabs ul li.active a:hover {
+	background-color: #eeeeee;
 }
 
+#original_tabs_content {
+	border: 1px solid #ccc;
+	border-top: none;
+	padding: 10px;
+	width: 100%;
+}
+
+#tabs ul li a.icon {
+	float:left;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    text-decoration:none;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+}
+#tabs ul li a.icon_keyspaces {
+	float:left;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    text-decoration:none;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+}
+
+#tabs ul li a.icon_add_keyspace {
+	float:left;
+    background:url("images/tabright.gif") no-repeat left top;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    
+    text-decoration:none;
+    background-position: 5px 3px;
+	background-repeat: no-repeat;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+	-moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border: 1px solid;
+}
+
+#tabs ul li a.icon_cql {
+	float:left;
+    background:url("images/tabright.gif") no-repeat left top;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    
+    text-decoration:none;
+    background-position: 5px 3px;
+	background-repeat: no-repeat;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+	-moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border: 1px solid;
+}
+
+#tabs ul li a.icon_cf {
+	float:left;
+    background:url("images/tabright.gif") no-repeat left top;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    
+    text-decoration:none;
+    background-position: 5px 3px;
+	background-repeat: no-repeat;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+	-moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border: 1px solid;
+}
+#tabs ul li a.icon_add_cf {
+	float:left;
+    background:url("images/tabright.gif") no-repeat left top;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    
+    text-decoration:none;
+    background-position: 5px 3px;
+	background-repeat: no-repeat;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+	-moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border: 1px solid;
+}
+#tabs ul li a.icon_search_cf {
+	float:left;
+    background:url("images/tabright.gif") no-repeat left top;
+    margin:0;
+    padding-left: 24px;
+    padding:5px 15px 4px 6px;
+    
+    text-decoration:none;
+    background-position: 5px 3px;
+	background-repeat: no-repeat;
+	font: bold 11px/2.0em Verdana;
+	color:#FFF;
+	-moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border: 1px solid;
+}
+
+icon_cluster {
+	background-image: url(images/icons/cluster.png);
+	background-position: 5px 3px;
+	background-repeat: no-repeat;
+	padding-left: 24px;
+}
+
+#tabs .ui-widget-content { border: none; background: none; }
+#tabs .ui-widget-header { border: none; background: none; }
+
+#tabs .ui-tabs .ui-tabs-panel {
+ background: #FFF5AA; /* <------------------------ background of tab content area */
+ border: 1px solid #38402D; /* <------------------------ border of tab content area */
+ position: relative;
+ min-height: 200px;
+ height: auto !important;
+ -moz-border-radius: 10px;
+ -webkit-border-radius: 10px;
+ -khtml-border-radius: 10px;
+ border-radius: 10px;
+ padding-top: 20px; 
+}
+
+.header-border{border:solid 1px #ccc;}
