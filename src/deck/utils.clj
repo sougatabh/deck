@@ -89,7 +89,8 @@
 
 (defn read-all-settings []
   "Read the settings file"
- (slurp (clojure.java.io/resource "settings")))
+ (let [rdr (io/reader "resources/settings" :append true)]
+   (apply str (line-seq rdr))))
 
 
 
