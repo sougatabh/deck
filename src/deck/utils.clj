@@ -1,5 +1,5 @@
 (ns ^{:author "Sougata Bhattacharya"
-      :doc "A Cassandra Admin Tool"}  
+      :doc "A Cassandra Admin Tool "}  
   deck.utils
   (:use [clojure.string :only (join split)])
   (:require [clojure.java.io :as io])
