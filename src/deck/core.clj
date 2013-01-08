@@ -15,7 +15,7 @@
 (defroutes deck-routes
    (route/files "/" {:root "public"})
    (GET "/" {:as request} (main-page request))
-
+   (GET "/contact" {:as request} (contact-page request))
    (GET "/index" {:as request} (index request))
    (GET "/create-keyspace" {:as request} (create-keyspace request))
    (GET "/show-keyspaces" {:as request} (show-keyspaces-page request))

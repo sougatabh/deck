@@ -318,6 +318,10 @@
     (println (cassandra-get-rows-cql-query (:hostname params) (:clustername params) (:keyspace params) (:query params)))
     (redirect (str "/show-cql-editor?hostname="(:hostname params) "&clustername=" (:clustername params) "&keyspace=" (:keyspace params)))))
 
+(defn contact-page
+  [request]
+  (let [params (:params request)]
+    (basil-core/render-by-name mtask-tpl "contact.html" [{:keyspaces (generate-main-left-nav)}])))
 
 (defn left-nav
   [request]
