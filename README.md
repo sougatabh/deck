@@ -3,7 +3,7 @@
 Deck is a web based Cassandra client that help you to explore data and manage your schema in cassandra cluster.
 
 ## Current Version
-0.1.0
+0.2.0
 
 ## Download
 [here](https://github.com/sougatabh/deck/downloads)
