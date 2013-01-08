@@ -1,5 +1,9 @@
 #Changes and TODO
 
+## 2013-Jan-08/ 0.2.0
+
+*Changed the UI for all the screens
+
 ## 2012-Dec-05/ 0.1.0
 
 * Create new keyspace
